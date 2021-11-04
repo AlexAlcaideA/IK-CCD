@@ -80,8 +80,8 @@ public class iksolver : MonoBehaviour {
 						// find the components using dot and cross product
 						//TODO4
 
-						angle = Mathf.Acos(Vector3.Dot(r1, r2)) * Mathf.Rad2Deg;
-						axis = Vector3.Cross(r1, r2);
+						angle = Mathf.Acos(Vector3.Dot(r1.normalized, r2.normalized)) * Mathf.Rad2Deg;
+						axis = Vector3.Cross(r1, r2).normalized;
 
 					}
 
