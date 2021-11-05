@@ -73,7 +73,8 @@ public class iksolver : MonoBehaviour {
 					if (r1.magnitude * r2.magnitude <= 0.001f)
 					{
 						// cos ? sin? 
-                        //TODO3
+						//TODO3
+						continue;
 					}
 					else
 					{
@@ -81,6 +82,7 @@ public class iksolver : MonoBehaviour {
 						//TODO4
 
 						angle = Mathf.Acos(Vector3.Dot(r1.normalized, r2.normalized)) * Mathf.Rad2Deg;
+						//angle = Vector3.Angle(r1.normalized, r2.normalized);
 						axis = Vector3.Cross(r1, r2).normalized;
 
 					}
@@ -108,7 +110,13 @@ public class iksolver : MonoBehaviour {
 					// TODO9
 					
 					//joints[i].transform.localRotation = Quaternion.AngleAxis(_theta[i], axis);
-					joints[i].transform.Rotate(axis, _theta[i], Space.Self);
+
+					if(Mathf.Cos(angle) < 0.9999f)
+                    {
+						joints[i].transform.Rotate(axis, _theta[i], Space.World);
+					}
+					
+						
 				}
 				
 				// increment tries
@@ -118,20 +126,22 @@ public class iksolver : MonoBehaviour {
 
 		// find the difference in the positions of the end effector and the target
 		// TODO10
-		
+		float distance = Vector3.Distance(tpos, joints[joints.Length - 1].transform.position);
+
 		// if target is within reach (within epsilon) then the process is done
-		/*if (TODO11)
-		{
-			done = true;
-		}
-		// if it isn't, then the process should be repeated
-		else
-		{
-			done = false;
-		}*/
-		
-		// the target has moved, reset tries to 0 and change tpos
-		if(targ.transform.position!=tpos)
+		//TODO11
+		if (distance <= _epsilon)
+        {
+            _done = true;
+        }
+        // if it isn't, then the process should be repeated
+        else
+        {
+            _done = false;
+        }
+
+        // the target has moved, reset tries to 0 and change tpos
+        if (targ.transform.position!=tpos)
 		{
 			_tries = 0;
 			tpos = targ.transform.position;
